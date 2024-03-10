@@ -1,8 +1,7 @@
 # XML_Assignment_2
-In the orders.xsd created a schema that will validate the data entered into orders.xml
+# In the orders.xsd created a schema that will validate the data entered into orders.xml
 
-
-# The schema defined in the .xsd file specifies the structure and rules for valid XML documents.
+- The schema defined in the .xsd file specifies the structure and rules for valid XML documents.
 
 # Root Element:
 - The root element is <customers>, which represents a collection of
