@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   New Perspectives on XML
+   Tutorial 3
+   Case Problem 4
+
+   Map Finds For You schema
+   Author:  Ankush Singh 
+   Date:    3/6/24
+
+   Filename:         orders.xsd
+   Supporting Files: orders.xml
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <!-- Pattern for custID and orderID -->
+    <!-- Defines a pattern for customer and order IDs -->
+    <xs:simpleType name="custIDType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="cust\d{3}"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="orderIDType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="or\d{3}"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- Pattern for title -->
+    <!-- Defines a pattern for titles (Mr., Ms., Mrs.) -->
+    <xs:simpleType name="titleType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Mr."/>
+            <xs:enumeration value="Ms."/>
+            <xs:enumeration value="Mrs."/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- Pattern for saleItem -->
+    <!-- Defines a pattern for indicating if an item is on sale (Y/N) -->
+    <xs:simpleType name="saleItemType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Y"/>
+            <xs:enumeration value="N"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- Complex Type for Item -->
+    <!-- Defines the structure of an individual item -->
+    <xs:complexType name="ItemType">
+        <xs:sequence>
+            <xs:element name="itemPrice">
+                <xs:complexType>
+                    <xs:simpleContent>
+                        <xs:extension base="xs:decimal">
+                            <xs:attribute name="saleItem" type="saleItemType" use="optional"/>
+                        </xs:extension>
+                    </xs:simpleContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="itemQty" type="xs:positiveInteger"/>
+        </xs:sequence>
+        <xs:attribute name="itemNumber" type="xs:string" use="required"/>  <!-- Attribute for item number -->
+    </xs:complexType>
+
+    <!-- Complex Type for Items -->
+    <!-- Defines a collection of items -->
+    <xs:complexType name="ItemsType">
+        <xs:sequence>
+            <xs:element name="item" type="ItemType" maxOccurs="unbounded"/>  <!-- Element representing an item -->
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Complex Type for Order -->
+    <!-- Defines the structure of an order -->
+    <xs:complexType name="OrderType">
+        <xs:sequence>
+            <xs:element name="orderDate" type="xs:date"/>  <!-- Element for order date -->
+            <xs:element name="items" type="ItemsType"/> <!-- Element for order date -->
+        </xs:sequence>
+        <xs:attribute name="orderID" type="orderIDType" use="required"/>   <!-- Attribute for order ID -->
+        <xs:attribute name="orderBy" type="custIDType" use="required"/>  <!-- Attribute for customer ID -->
+    </xs:complexType>
+
+    <!-- Complex Type for Orders -->
+    <!-- Defines a collection of the orders -->
+    <xs:complexType name="OrdersType">
+        <xs:sequence>
+            <xs:element name="order" type="OrderType" maxOccurs="unbounded"/>  <!-- Element representing an order -->
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Complex Type for Customer -->
+    <!-- Defines the structure of a customer -->
+    <xs:complexType name="CustomerType">
+        <xs:sequence>
+            <xs:element name="custID" type="custIDType"/>  <!-- Element for customer ID -->
+            <xs:element name="name">
+                <xs:complexType>
+                    <xs:simpleContent>
+                        <xs:extension base="xs:string">
+                            <xs:attribute name="title" type="titleType" use="optional"/> <!-- Attribute for title -->
+                        </xs:extension>
+                    </xs:simpleContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="address" type="xs:string"/> <!-- Element for address -->
+            <xs:element name="phone" type="xs:string"/>  <!-- Element for phone number -->
+            <xs:element name="email" type="xs:string"/>  <!-- Element for email -->
+            <xs:element name="orders" type="OrdersType"/> <!-- Element for orders placed by the customer -->
+        </xs:sequence> 
+    </xs:complexType>
+
+    <!-- Complex Type for Customers, which is a collection of Customer -->
+    <!-- Defines a collection of customers -->
+    <xs:complexType name="CustomersType">
+        <xs:sequence>
+            <xs:element name="customer" type="CustomerType" maxOccurs="unbounded"/>  <!-- Element representing a customer -->
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Root Element -->
+    <!-- Defines the root element of the XML document -->
+    <!-- Root element representing a collection of customers -->
+    <xs:element name="customers" type="CustomersType"/> 
+
+</xs:schema>
